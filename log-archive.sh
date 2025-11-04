@@ -64,7 +64,7 @@ echo "Archiving logs from: $LOG_DIR"
 echo "Creating archive: $ARCHIVE_NAME"
 
 # Only include .log files to avoid unnecessary files
-tar -czf "$ARCHIVE_PATH" -C "$LOG_DIR" -- *.log 2>/dev/null || {
+tar -czf "$ARCHIVE_PATH" -C "$LOG_DIR" $(find . -maxdepth 1 -type f -name "*.log") 2>/dev/null || {
     echo "Failed to create archive!"
     exit 1
 }
