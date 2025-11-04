@@ -63,11 +63,14 @@ ARCHIVE_PATH="$ARCHIVE_DIR/$ARCHIVE_NAME"
 echo "Archiving logs from: $LOG_DIR"
 echo "Creating archive: $ARCHIVE_NAME"
 
-# Only include .log files to avoid unnecessary files
-tar -czf "$ARCHIVE_PATH" -C "$LOG_DIR" -- *.log 2>/dev/null || {
-    echo "Failed to create archive!"
-    exit 1
-}
+# Change to the log directory so tar can find .log files correctly
+(
+    cd "$LOG_DIR"
+    tar -czf "$OLDPWD/$ARCHIVE_PATH" *.log || {
+        echo "Failed to create archive!"
+        exit 1
+    }
+)
 
 # ---------- LOG THE EVENT ----------
 ARCHIVE_SIZE=$(du -h "$ARCHIVE_PATH" | cut -f1)
